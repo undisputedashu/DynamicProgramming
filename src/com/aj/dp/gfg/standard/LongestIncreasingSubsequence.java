@@ -1,3 +1,4 @@
+
 package com.aj.dp.gfg.standard;
 
 import java.util.Arrays;
@@ -18,21 +19,25 @@ public class LongestIncreasingSubsequence {
 			int a[] = new int[n];
 			for (int i=0;i<n;i++) a[i] = in.nextInt();
 			
-//			lis(a, n); its recursive solution it can be modified a little to give optimized memoized solution
-//			System.out.println(max);Memoization is easy and should be used when we are unable to find bottom up solution
+			//Recursive solution
+			lisRecursive(a, n); //its recursive solution it can be modified a little to give optimized memoized solution
+			System.out.println(max);//Memoization is easy and should be used when we are unable to find bottom up solution
+			
+			//Memoized solution
 			int d[] = new int[n+1];
 			d[0] = 0;
 			d[1] = 1;
 			Arrays.fill(d, -1);
-			lisMemoized(a, n, d);
+			lisMemoized(a, n, d);//It uses recursive solution, just stores computed result in passed table
 			int max = 0;
 			for (int i=1;i<=n;i++) {
 				if (d[i] > max) {
 					max = d[i];
 				}
 			}
-//			System.out.println(max);
+			System.out.println(max);
 			
+			//DP solution
 			max = lisDp(a, n);
 			System.out.println(max);
 		}
@@ -74,12 +79,12 @@ public class LongestIncreasingSubsequence {
 	}
 
 	private static int max = 1;
-	private static int lis(int[] a, int n) {
+	private static int lisRecursive(int[] a, int n) {
 		if (n == 1) return 1;
 		
 		int res = 1;
 		for (int i=1;i<n;i++) {
-			int curr = lis(a, i);
+			int curr = lisRecursive(a, i);
 			if (a[n-1] > a[i-1] && curr + 1 > res) {
 				res = curr+1;
 			}
