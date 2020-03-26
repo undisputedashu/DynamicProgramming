@@ -6,6 +6,9 @@ import java.util.Map;
 /**
  * https://www.geeksforgeeks.org/min-cost-path-dp-6/
  * @author ashu
+ * check differnce in recursive and dp approach
+ * these minor tweaks can be used.
+ * Starting point and end point decisions.
  */
 public class MinCostPath {
 
@@ -16,7 +19,7 @@ public class MinCostPath {
 				{4,8,2},
 				{1,5,3}
 		};
-		int cnt = get(a, 0, 0);
+		int cnt = getRecursive(a, 0, 0);
 		System.out.println(cnt);
 		
 		Map<String, Integer> map = new HashMap<String, Integer>();
@@ -28,7 +31,22 @@ public class MinCostPath {
 	}
 
 	private static int getDp(int[][] a) {
-		return 0;
+		int m = a.length, n = a[0].length;
+		int t[][] = new int[m+1][n+1];
+		
+		for (int i=1;i<=m;i++) {
+			t[i][0] = t[i-1][0] + a[i-1][0];
+		}
+		for (int j=1;j<=n;j++) {
+			t[0][j] = t[0][j-1] + a[0][j-1];
+		}
+		
+		for (int i=1;i<=m;i++) {
+			for (int j=1;j<=n;j++) {
+				t[i][j] = min(t[i-1][j], t[i][j-1], t[i-1][j-1]) + a[i-1][j-1];
+			}
+		}
+		return t[m][n];
 	}
 
 	private static int getMem(int[][] a, int i, int j, Map<String, Integer> map) {
@@ -48,7 +66,7 @@ public class MinCostPath {
 		return value;
 	}
 
-	private static int get(int[][] a, int i, int j) {
+	private static int getRecursive(int[][] a, int i, int j) {
 		int m = a.length, n = a[0].length;
 		if (i>= m || i<0) return max;
 		if (j>= n || j<0) return max;
@@ -56,7 +74,7 @@ public class MinCostPath {
 		if (i == m-1 && j == n-1)
 			return a[i][j];
 		
-		return a[i][j] + min(get(a,i+1,j), get(a,i,j+1), get(a,i+1,j+1));
+		return a[i][j] + min(getRecursive(a,i+1,j), getRecursive(a,i,j+1), getRecursive(a,i+1,j+1));
 	}
 	
 	private static int min(int a,int b,int c) {

@@ -1,5 +1,5 @@
 
-package com.aj.dp.gfg.standard;
+package com.aj.dp.tc;
 
 import java.util.Arrays;
 import java.util.Scanner;
