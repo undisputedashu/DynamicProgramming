@@ -1,4 +1,4 @@
-package com.aj.dp.tc;
+package com.aj.dp.tc.elementary;
 
 import java.util.Arrays;
 

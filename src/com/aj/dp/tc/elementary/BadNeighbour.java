@@ -1,4 +1,4 @@
-package com.aj.dp.tc;
+package com.aj.dp.tc.elementary;
 
 /**
  * https://community.topcoder.com/stat?c=problem_statement&pm=2402&rd=5009
