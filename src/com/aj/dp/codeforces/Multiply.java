@@ -1,13 +1,21 @@
 package com.aj.dp.codeforces;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * https://codeforces.com/problemset/problem/1061/C
  */
 public class Multiply {
 	private static int size = 1000001;
+	private static long mod = (long)1e9 + 7;
 	public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
  
@@ -16,12 +24,51 @@ public class Multiply {
         int a[] = new int[n];
         for(int i = 0; i < n; ++i)
             a[i] = sc.nextInt();
- 
-        method2(a, n);//its slow gives tle
+
+        method3(a, n);
+//        method2(a, n);//its slow gives tle
 //        method1(n, a);
         sc.close();
     }
 	
+	private static void method3(int[] a, int n) {
+		Map<Integer, List<Integer>> divs = new HashMap<>();
+		for (int i=0;i<n;i++) {
+			populate(a[i], divs, n);
+		}
+		
+		long t[] = new long[n+1];
+		Arrays.fill(t, 0);
+		t[0] = 1;
+		
+		for (int i=0;i<n;i++) {
+			for (int x : divs.get(a[i])) {
+				t[x] = (t[x] + t[x-1])%mod;
+			}
+		}
+		
+		long sum = 0;
+		for (int i=1;i<=n;i++) sum = (sum + t[i])%mod;
+		System.out.println(sum);
+	}
+
+	private static void populate(int x, Map<Integer, List<Integer>> divs, int n) {
+		if (divs.containsKey(x)) return;
+		List<Integer> list = new ArrayList<Integer>();
+		Set<Integer> set = new HashSet<Integer>();
+		for (int i=1;i<=Math.sqrt(x);i++) {
+			if (x % i == 0) {
+				int a = i, b = x/i;
+				//if a or b is greater than n its not required to maintain data about it
+				if (a<=n) set.add(a);
+				if (b<=n) set.add(b);
+			}
+		}
+		list.addAll(set);
+		Collections.sort(list, Collections.reverseOrder());
+		divs.put(x, list);
+	}
+
 	private static void method2(int[] a, int n) {
 		int t[] = new int[n+1];
 		Arrays.fill(t, 0);
@@ -38,7 +85,7 @@ public class Multiply {
 		System.out.println(sum);
 	}
 
-	static void method1(int n, int[] a) {
+	private static void method1(int n, int[] a) {
 		int divCnt[] = new int[size];
         for(int i = size-1; i >= 1; --i) {
             for(int j = i; j <= size-1; j += i)
@@ -55,8 +102,6 @@ public class Multiply {
                 div[j][ptr[j]++] = i;
         }
  
-        long mod = (long)1e9 + 7;
-        
         long ans[] = new long[size];
         ans[0] = 1;
  
@@ -72,5 +117,6 @@ public class Multiply {
         }
  
         System.out.print(fans);
-	}	
+	}
+	
 }
